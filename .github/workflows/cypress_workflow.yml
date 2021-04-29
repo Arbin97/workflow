@@ -12,21 +12,20 @@ on:
       - master
 
 jobs:
-  cypress-test:
-    name: Run on Chrome 89
+   cypress-run:
     runs-on: ubuntu-latest
-    container : cypress/browsers:node14.16.0-chrome89-ff86
+    container: cypress/browsers:node12.18.3-chrome89-ff86
     steps:
-      - uses: actions/checkout@v2
-      
-      - name: Install cypress and verify
-        run:
-          npm ci
-          $(npm bin)/cypress verify
-        
-      - name: Run Cypress Tests
-        run: npm run test:chrome
-        continue-on-error: false
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          # Specify Browser since container image is compile with Firefox
+          browser: firefox
         
       - name: Copy test execution videos and screenshots
         run: |
